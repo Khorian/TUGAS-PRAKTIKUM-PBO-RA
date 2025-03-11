@@ -1,0 +1,79 @@
+# Kelas Induk Kendaraan
+class Kendaraan:
+    def __init__(self, jenis, kecepatan_maksimum):
+        self.jenis = jenis  # Jenis kendaraan (Darat, Air, Udara)
+        self.kecepatan_maksimum = kecepatan_maksimum  # Kecepatan maksimum dalam km/jam
+
+    def info_kendaraan(self):
+        print(f"Jenis Kendaraan: {self.jenis}")
+        print(f"Kecepatan Maksimum: {self.kecepatan_maksimum} km/jam")
+
+    def bergerak(self):
+        print("Kendaraan sedang bergerak...")
+
+# Kelas Turunan Mobil dari Kendaraan
+class Mobil(Kendaraan):
+    def __init__(self, jenis, kecepatan_maksimum, merk, jumlah_pintu):
+        super().__init__(jenis, kecepatan_maksimum)  # Memanggil konstruktor kelas induk
+        self.merk = merk  # Merek mobil
+        self.jumlah_pintu = jumlah_pintu  # Jumlah pintu mobil
+
+    def info_mobil(self):
+        self.info_kendaraan()
+        print(f"Merk: {self.merk}")
+        print(f"Jumlah Pintu: {self.jumlah_pintu}")
+
+    def bunyikan_klakson(self):
+        print("Beep! Beep! Mobil membunyikan klakson.")
+
+# Kelas Turunan MobilSport dari Mobil
+class MobilSport(Mobil):
+    def __init__(self, jenis, kecepatan_maksimum, merk, jumlah_pintu, tenaga_kuda, harga):
+        super().__init__(jenis, kecepatan_maksimum, merk, jumlah_pintu)
+        self.__tenaga_kuda = tenaga_kuda  # Private attribute
+        self.__harga = harga  # Private attribute
+
+    # Getter dan Setter untuk tenaga_kuda
+    def get_tenaga_kuda(self):
+        return self.__tenaga_kuda
+
+    def set_tenaga_kuda(self, value):
+        if value > 0:
+            self.__tenaga_kuda = value
+        else:
+            print("Tenaga kuda harus lebih dari 0!")
+
+    # Getter dan Setter untuk harga
+    def get_harga(self):
+        return self.__harga
+
+    def set_harga(self, value):
+        if value > 0:
+            self.__harga = value
+        else:
+            print("Harga harus lebih dari 0!")
+
+    def info_mobil_sport(self):
+        self.info_mobil()
+        print(f"Tenaga Kuda: {self.__tenaga_kuda} HP")
+        print(f"Harga: Rp {self.__harga} juta")
+
+    def mode_balap(self):
+        print("Mobil sport masuk ke mode balap! Vroooom!")
+
+# Contoh Penggunaan Program
+mobil_sport = MobilSport("Darat", 350, "Ferrari", 2, 700, 15000)
+
+# Menampilkan informasi mobil sport
+mobil_sport.info_mobil_sport()
+
+# Mengubah nilai tenaga kuda dan harga
+mobil_sport.set_tenaga_kuda(750)
+mobil_sport.set_harga(16000)
+
+print("\nSetelah perubahan:")
+mobil_sport.info_mobil_sport()
+
+# Menjalankan metode lain
+mobil_sport.bunyikan_klakson()
+mobil_sport.mode_balap()
