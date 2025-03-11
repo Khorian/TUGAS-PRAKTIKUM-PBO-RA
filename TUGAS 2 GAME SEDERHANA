@@ -1,0 +1,80 @@
+# Mengimpor modul random untuk menghasilkan angka acak, digunakan dalam mekanisme serangan
+import random
+
+class Robot:
+    # Konstruktor untuk inisialisasi robot dengan nama, HP, attack, dan defense
+    def __init__(self, name, hp, attack, defense):
+        self.name = name
+        self.hp = hp
+        self.attack = attack
+        self.defense = defense
+    
+    # Metode untuk menyerang musuh
+    def attack_enemy(self, enemy):
+        if random.random() > 0.2:  # 80% kemungkinan serangan mengenai target
+            damage = max(0, self.attack - enemy.defense)  # Menghitung damage dengan mempertimbangkan defense musuh
+            enemy.hp -= damage  # Mengurangi HP musuh dengan damage yang diberikan
+            print(f"{self.name} menyerang {enemy.name} dan memberikan {damage} damage!")
+        else:
+            print(f"{self.name} gagal menyerang {enemy.name}!")
+    
+    # Metode untuk meningkatkan pertahanan robot
+    def defend(self):
+        self.defense += 2  # Menambah nilai pertahanan robot
+        print(f"{self.name} meningkatkan pertahanan!")
+    
+    # Metode untuk mengecek apakah robot sudah kalah
+    def is_defeated(self):
+        return self.hp <= 0
+
+class Game:
+    # Konstruktor untuk mengatur permainan dengan dua robot
+    def __init__(self, robot1, robot2):
+        self.robot1 = robot1
+        self.robot2 = robot2
+        self.round = 1  # Inisialisasi ronde pertama
+    
+    # Metode utama untuk menjalankan permainan
+    def play(self):
+        while True:
+            print(f"\nRound-{self.round} =====================================")
+            print(f"{self.robot1.name} [{self.robot1.hp}|{self.robot1.attack}]")
+            print(f"{self.robot2.name} [{self.robot2.hp}|{self.robot2.attack}]")
+            
+            # Setiap robot akan bergiliran memilih aksi
+            for robot in [self.robot1, self.robot2]:
+                print("\n1. Attack     2. Defense     3. Giveup")
+                choice = input(f"{robot.name}, pilih aksi: ")
+                if choice == '1':  # Jika memilih menyerang
+                    target = self.robot1 if robot == self.robot2 else self.robot2
+                    robot.attack_enemy(target)
+                elif choice == '2':  # Jika memilih bertahan
+                    robot.defend()
+                elif choice == '3':  # Jika menyerah
+                    print(f"{robot.name} menyerah!")
+                    winner = self.robot2 if robot == self.robot1 else self.robot1
+                    print(f"{winner.name} menang!")
+                    return
+                
+                # Mengecek apakah ada robot yang kalah setelah aksi dilakukan
+                if self.robot1.is_defeated() or self.robot2.is_defeated():
+                    break
+            
+            # Menentukan pemenang jika ada yang kalah
+            if self.robot1.is_defeated():
+                print(f"{self.robot2.name} menang!")
+                break
+            elif self.robot2.is_defeated():
+                print(f"{self.robot1.name} menang!")
+                break
+            
+            # Melanjutkan ke ronde berikutnya
+            self.round += 1
+
+# Inisialisasi dua robot dengan HP, attack, dan defense masing-masing
+robot1 = Robot("rian ", 500, 10, 3)
+robot2 = Robot("ilyas ", 750, 8, 5)
+
+# Membuat objek game dan memulai permainan
+game = Game(robot1, robot2)
+game.play()
